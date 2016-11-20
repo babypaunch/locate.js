@@ -49,15 +49,15 @@ var locate = function(){
 	if(data !== undefined){
 		var D = {
 			url: ""
-			, param: ""
-			, form: ""
-			, type: "post"
-			, sendType: "text" //text, json, file
-			, returnType: "text" //text, json, jsonp
-			, headers: {}
-			, done: undefined 
-			, fail: undefined
-			, bypass: {}
+			, param: "" //string or json
+			, form: undefined //form element
+			, type: "post" //get or post
+			, sendType: "text" //text(default), json, file
+			, returnType: "text" //text(default), json, jsonp
+			, headers: {} //set ajax header data
+			, done: undefined //success
+			, fail: undefined //error
+			, bypass: {} //parameter for callback
 		};
 		$.extend(true, D, data);
 		console.log("[D]", D);
@@ -68,6 +68,11 @@ var locate = function(){
 		if(D.sendType === "file"){ //ajax file send
 			D.contentType = false;
 			D.processData = false;
+			
+			D.param = new FormData();
+			$.each($("#file")[0].files, function(i, file){
+				D.append("file-" + i, file);
+			});
 		}else{ //text or json
 			var sendType = {
 				text: "application/x-www-form-urlencoded; charset=utf-8"
@@ -89,7 +94,7 @@ var locate = function(){
 		$.ajax({
 			type: D.type
 			, url: D.url
-			, data: D.params
+			, data: D.param
 			, dataType: D.dataType
 			, contentType: D.contentType
 			, processData: D.processData
