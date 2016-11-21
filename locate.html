@@ -88,24 +88,21 @@
 				</div>
 				<br/>
 				<div>
-					<form id="form2-2"">
-						<div class="form-group col-xs-2">
+					<form id="form2-2">
+						<div class="form-group col-xs-4">
 							<label for="urlString">url(start with http://)</label>
 							<input type="text" name="url" id="urlString2-2" class="form-control" value=""/>
-						</div>
-						<div class="form-group col-xs-2">
+							<br/>
 							<label for="qString2-2-1">input[name='q2-2-1']</label>
 							<input type="text" name="q2-2-1" id="qString2-2-1" class="form-control"/>
-						</div>
-						<div class="form-group col-xs-2">
+							<br/>
 							<label for="qString2-2-2">input[name='q2-2-2']</label>
 							<input type="text" name="q2-2-2" id="qString2-2-2" class="form-control"/>
-						</div>
-						<div class="form-group col-xs-2">
+							<br/>
 							<label for="qString2-2-3">input[name='q2-2-3']</label>
 							<input type="text" name="q2-2-3" id="qString2-2-3" class="form-control"/>
 						</div>
-						<div class="form-group col-xs-2">
+						<div class="form-group col-xs-4">
 							<button type="button" id="locate2-2" class="locate btn btn-default" style="margin-top: 25px;">locate2-2</button>
 						</div>
 					</form>
@@ -129,17 +126,130 @@
 				</div>
 				<br/>
 				<div>
-					<form id="form3"">
-						<div class="form-group col-xs-2">
+					<form id="form3">
+						<div class="form-group col-xs-4">
 							<label for="urlString">url(start with http://)</label>
 							<input type="text" name="url" id="urlString3" class="form-control" value="http://www.google.com"/>
 						</div>
-						<div class="form-group col-xs-2">
+						<div class="form-group col-xs-4">
 							<label for="qString">param(serialized)</label>
 							<input type="text" name="q" id="qString3" class="form-control"/>
 						</div>
-						<div class="form-group col-xs-2">
+						<div class="form-group col-xs-4">
 							<button type="button" id="locate3" class="locate btn btn-default" style="margin-top: 25px;">locate3</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Example 4-1. locate(url, json)
+			</div>
+			<div class="panel-body">
+				<div>
+<code>$(function(){</code>
+<code class="tab1x">$("#locate4-1").click(function(){</code>
+<code class="tab2x">locate($("#urlString4-1").val(), {</code>
+<code class="tab3x">type: "get"</code>
+<code class="tab3x">, sendType: "text"</code>
+<code class="tab3x">, returnType: "text"</code>
+<code class="tab3x">, callback: "locate4_1"</code>
+<code class="tab2x">});</code>
+<code class="tab1x">});</code>
+<code>})</code>
+				</div>
+				<br/>
+				<div>
+					<form id="form4-1">
+						<div class="form-group col-xs-4">
+							<label for="urlString">url(start with http://)</label>
+							<input type="text" name="url" id="urlString4-1" class="form-control" value="http://188.166.233.23:88/ajax"/>
+						</div>
+						<div class="form-group col-xs-4">
+							<button type="button" id="locate4-1" class="locate btn btn-default" style="margin-top: 25px;">locate4-1</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Example 4-2. locate(url, json)
+			</div>
+			<div class="panel-body">
+				<div>
+<code>$(function(){</code>
+<code class="tab1x">$("#locate4-2").click(function(){</code>
+<code class="tab2x">locate($("#urlString5").val(), {</code>
+<code class="tab3x">param: $("#form4-2").seiralize()</code>
+<code class="tab3x">, type: "get"</code>
+<code class="tab3x">, sendType: "text"</code>
+<code class="tab3x">, returnType: "text"</code>
+<code class="tab3x">, callback: "locate4_2"</code>
+<code class="tab2x">});</code>
+<code class="tab1x">});</code>
+<code>})</code>
+				</div>
+				<br/>
+				<div>
+					<form id="form5">
+						<div class="form-group col-xs-4">
+							<label for="urlString">url(start with http://)</label>
+							<input type="text" name="url" id="urlString4-2" class="form-control" value="http://188.166.233.23:88/ajax"/>
+							<br/>
+							<label for="qString2-2-1">input[name='q4-2-1']</label>
+							<input type="text" name="q4-2-1" id="qString4-2-1" class="form-control" value="11"/>
+							<br/>
+							<label for="qString2-2-2">input[name='q4-2-2']</label>
+							<input type="text" name="q4-2-2" id="qString4-2-2" class="form-control" value="22"/>
+							<br/>
+							<label for="qString2-2-3">input[name='q4-2-3']</label>
+							<input type="text" name="q4-2-3" id="qString4-2-3" class="form-control" value="33"/>
+						</div>
+						<div class="form-group col-xs-4">
+							<button type="button" id="locate4-2" class="locate btn btn-default" style="margin-top: 25px;">locate4-2</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Example 4-3. locate(url, json)
+			</div>
+			<div class="panel-body">
+				<div>
+<code>$(function(){</code>
+<code class="tab1x">$("#locate4-3").click(function(){</code>
+<code class="tab2x">locate($("#urlString4-3").val(), {</code>
+<code class="tab3x">param: {a: "12", b: "34"}</code>
+<code class="tab3x">, type: "get"</code>
+<code class="tab3x">, sendType: "text"</code>
+<code class="tab3x">, returnType: "text"</code>
+<code class="tab3x">, callback: "locate4_3"</code>
+<code class="tab2x">});</code>
+<code class="tab1x">});</code>
+<code>})</code>
+				</div>
+				<br/>
+				<div>
+					<form id="form4">
+						<div class="form-group col-xs-4">
+							<label for="urlString">url(start with http://)</label>
+							<input type="text" name="url" id="urlString4-3" class="form-control" value="http://188.166.233.23:88/ajax"/>
+						</div>
+						<div class="form-group col-xs-4">
+							<button type="button" id="locate4-3" class="locate btn btn-default" style="margin-top: 25px;">locate4-3</button>
 						</div>
 					</form>
 				</div>
@@ -170,7 +280,54 @@
 			$("#locate3").click(function(){
 				locate($("#urlString3").val(), $("#form3"));
 			});
+
+			$("#locate4-1").click(function(){
+				locate($("#urlString4-1").val(), {
+					type: "get"
+					, sendType: "text"
+					, returnType: "jsonp"
+					, callback: "locate4_1"
+				});
+			});
+
+			$("#locate4-2").click(function(){
+				locate($("#urlString4-2").val(), {
+					param: $("#form4-2").serialize()
+					, type: "get"
+					, sendType: "text"
+					, returnType: "jsonp"
+					, callback: "locate4_2"
+				});
+			});
+			
+			$("#locate4-3").click(function(){
+				locate($("#urlString4-3").val(), {
+					param: {"a": "12", "b": "34"}
+					, type: "get"
+					, sendType: "text"
+					, returnType: "jsonp"
+					, callback: "locate4_3"
+					, loading: function(){
+						alert("loading");
+					}
+					, unloading: function(){
+						alert("END");
+					}
+				});
+			});
 		});
+
+		function locate4_1(data){
+			console.log("[locate4_1]", data);
+		}
+
+		function locate4_2(data){
+			console.log("[locate4_2]", data);
+		}
+
+		function locate4_3(data){
+			console.log("[locate4_3]", data);
+		}
 	</script>
 </body>
 </html>
