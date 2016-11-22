@@ -57,77 +57,122 @@ var locate = function(){
 		var D = {
 			url: ""
 			, param: "" //string or json
-			, form: undefined //form element for ajax submit
 			, type: "post" //get or post
-			, sendType: "text" //text(default), json, file
 			, returnType: "text" //text(default), json, jsonp
-			, headers: {} //set ajax header data
-			, callback: "" //set callback name for jsonp
-			, done: undefined //success
-			, fail: undefined //error
+			, headers: {} //set ajax header data(can't set with jsonp)
+			, done: function(){} //success
+			, fail: function(){} //error
 			, loading: undefined //show loading callback
 			, unloading: undefined //hide loading callback
+
+			, unique: function(){
+				var result = "_";
+				for(var i = 0; i < 8; i++){
+					result += Math.floor((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+				}
+				return result;
+			}
 		};
 		$.extend(true, D, data);
 
-		/*
-		* 비동기 파일 전송시 반드시 contentType과 processData의 값이 false로 고정되야 함.
-		*/
-		if(D.sendType === "file"){ //ajax file send
-			D.contentType = false;
-			D.processData = false;
-			
-			D.param = new FromData(D.form[0]);
-		}else{ //text or json
-			var sendType = {
-				text: "application/x-www-form-urlencoded; charset=utf-8"
-				, json: "application/json; charset=utf-8"
+		D.processData = true;
+		D.data = D.param;
+		if($.type(D.param) === "string"){
+			console.log("[param][string]");
+			D.contentType = "application/x-www-form-urlencoded; charset=utf-8";
+		}else{
+			try{
+				if(D.param.is("form")){ //form
+					if(D.param.find("input[type='file']").length > 0){ //file ajaxSubmit
+						console.log("[param][form][has file]");
+						//비동기 파일 전송시 반드시 contentType과 processData의 값이 false로 고정되야 함.
+						D.contentType = false;
+						D.processData = false;
+
+						var formData = new FormData(D.param[0]);
+						D.data = formData;
+					}else{ //serialize form
+						console.log("[param][form][no file]");
+						D.contentType = "application/x-www-form-urlencoded; charset=utf-8";
+						D.data = D.param.serialize();
+					}
+				}
+			}catch(e){ //json
+				console.log("[param][json]");
+				D.contentType = "application/json; charset=utf-8";
 			}
-			D.contentType = sendType[D.sendType];
-			D.processData = true;
 		}
 
 		if(D.returnType === "jsonp"){
 			D.type = "get"; //jsonp로 받을 경우 반드시 type을 get으로 해야함.
-			D.jsonpCallback = D.callback; //jsonp일때 return받을 callback 함수명 대입
 
 			/*
 			* param의 유형에 따라 callback 함수명 대입
-			* server side에서 동적 callback 함수명 대입을 위해 사용함.
+			* server side에서 동적 callback 함수명으로 return하기 위해 사용해야 함.
+			* server side에서는 jsonpCallback 파라미터가 있을 경우 구현해야 함.
 			*/
-			if($.type(D.param) === "object"){
-				D.param.jsonpCallback = D.callback;
+			var u = D.unique();
+			if($.type(D.data) === "string"){
+				D.data += "&jsonpCallback=" + u;
 			}else{
-				D.param += "&jsonpCallback=" + D.callback;
+				try{
+					/*
+					* jsonp를 요청하면 get 방식을 권장하고 있다
+					* 따라서 jsonp를 이용할 때는 FormData에 먼저 jsonpCallback을 대입하고
+					* type이 object인 것들을 제외해서 D.data의 값을 serialized된 문자열로 대체한다.
+					*/
+					if(D.param.is("form")){ //form
+						D.data.append("jsonpCallback", u);
+
+						var serialized = "";
+						for(var pair of D.data.entries()){
+							if(typeof(pair[1]) !== "object"){
+								serialized += "&" + pair[0] + "=" + pair[1]
+							}
+						}
+						D.data = serialized;
+					}
+				}catch(e){ //json
+					D.data.jsonpCallback = u;
+				}
 			}
+
+			window[u] = D.done; //callback 함수 등록
 		}
 		D.dataType = D.returnType; //set dataType to text/json/jsonp
 
-		console.log("[D]", D);
-
 		if(D.loading !== undefined){
 			D.loading();
+		}else{
+			$("body").append("<div id='locate-spinner'></div>");
+			$("#locate-spinner").spinner().show();
 		}
+
 		/*
 		* ajax start
 		*/
 		$.ajax({
 			type: D.type
 			, url: D.url
-			, data: D.param
+			, data: D.data
 			, dataType: D.dataType
 			, contentType: D.contentType
 			, processData: D.processData
+			, headers: D.headers
 			, success: function(data, status, xhr){
-				if(D.unloading !== undefined){
-					D.unloading();
-				}
-				return arguments;
+				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
+
+				D.done(arguments);
 			}, error: function(xhr, status, error){
-				if(D.unloading !== undefined){
-					D.unloading();
+				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
+
+				if(D.dataType === "jsonp"){
+				   	if(xhr.status !== 200){
+						D.fail(arguments);
+					}
+				}else{
+					D.fail(arguments);
 				}
-				return arguments;
 			}
 		}); //end: $.ajax({
 	} //end: if(data !== undefined){
