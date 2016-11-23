@@ -19,6 +19,7 @@
 * 해당 url 페이지로 이동하는 같은 동작을 하는 함수다.
 <pre>
 	$(function(){
+		var url = "http://www.google.com";
 		locate(url);
 		
 		url.locate();
@@ -27,8 +28,24 @@
 
 ### 2. locate(url, string)/url.locate(string) method ###
 * 해당 url 페이지로 이동시 query string을 붙여 이동한다.
+* 아래 주석 처리된 결과는 모두 동일하게 처리된다.
 <pre>
 	$(function(){
+		var url = "http://www.google.com";
+		var string = "?q=123&a=abc";
+		
+		//var url = "http://www.google.com";
+		//var string = "&q=123&a=abc";
+		
+		//var url = "http://www.google.com";
+		//var string = "q=123&a=abc";
+		
+		//var url = "http://www.google.com?q=123";
+		//var string = "a=abc";
+		
+		//var url = "http://www.google.com?q=123";
+		//var string = "&a=abc";
+		
 		locate(url, string);
 		
 		url.locate(string);
@@ -39,6 +56,8 @@
 * 해당 url 페이지로 form을 submit하여 이동한다.
 <pre>
 	$(function(){
+		var url = "http://www.google.com";
+		
 		locate(url, $("form"));
 		
 		url.locate($("form"));
@@ -49,6 +68,17 @@
 * 해당 url 페이지로 ajax 요청한다.
 <pre>
 	$(function(){
+		var url = "http://www.google.com";
+		var json = {
+			param: "&q=123" //$("form").serialize(), {q: 123}, $("form")
+			, done: function(data){
+				console.log(data);
+			}
+			, fail: function(data){
+				console.log(data);
+			}
+		};
+		
 		locate(url, json);
 		
 		url.locate(json);
@@ -59,6 +89,17 @@
 * json 정보대로 ajax 요청한다.
 <pre>
 	$(function(){
+		var json = {
+			url: "http://www.google.com"
+			, param: "&q=123" //$("form").serialize(), {q: 123}, $("form")
+			, done: function(data){
+				console.log(data);
+			}
+			, fail: function(data){
+				console.log(data);
+			}
+		};
+		
 		locate(json);
 	});
 </pre>

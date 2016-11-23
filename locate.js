@@ -37,7 +37,8 @@ var locate = function(){
 		if($.type(arguments[1]) === "string"){ //param
 			var param = arguments[1] || "";
 			var question = url.indexOf("?") !== -1 || param.indexOf("?") !== -1;
-			location.href = question ? url + param : url + (param === "" ? "" : "?" + param);
+			var query = question ? (param === "" ? "" : (param.charAt(0) === "&" ? param : "&" + param)) : (param === "" ? "" : "?" + (param.charAt(0) === "&" ? param.substr(1) : param));
+			location.href = url + query; 
 		}else{
 			try{
 				if(arguments[1].is("form")){ //form
