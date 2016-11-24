@@ -105,55 +105,104 @@
 </pre>
 
 #### options description ####
+##### default value가 있다는 것은 생략할 수 있음을 의미한다. #####
 <table>
 	<tr>
 		<th>key</th>
+		<th>type</th>
 		<th>value</th>
-		<th>use when</th>
+		<th>comment</th>
 	</tr>
 	<tr>
 		<td>url</td>
-		<td>요청 url</td>
-		<td>page move, ajax</td>
+		<td>String</td>
+		<td>any</td>
+		<td>
+			<div>1. 요청 url</div>
+			<div>2. 화면 이동 + ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>param</td>
-		<td>요청 파라미터</td>
-		<td>page move, ajax</td>
+		<td>
+			<div>1. String</div>
+			<div>2. JSON</div>
+			<div>3. jquery form element</div>
+		</td>
+		<td>any(default)</td>
+		<td>
+			<div>1. 요청 파라미터</div>
+			<div>2. 화면 이동 + ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>type</td>
-		<td>요청 방식</td>
-		<td>ajax only</td>
+		<td>String</td>
+		<td>
+			<div>1. "get"</div>
+			<div>2. "post"(default)</div>
+		</td>
+		<td>
+			<div>1. 요청 방식</div>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>returnType</td>
-		<td>text(default)/json/jsonp</td>
-		<td>ajax only</td>
+		<td>String</td>
+		<td>
+			<div>1. "text"(default)</div>
+			<div>2. "json"</div>
+			<div>2. "jsonp"</div>
+		</td>
+		<td>
+			<div>1. 반환 방식</div>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>headers</td>
 		<td>json</td>
-		<td>ajax only</td>
+		<td>any(default)</td>
+		<td>
+			<div>1. 서버로 전송할 header 값</div>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>done</td>
 		<td>callback function</td>
-		<td>ajax only</td>
+		<td>any(default)</td>
+		<td>
+			<div>1. ajax 결과에 대한 성공 응답</div>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>fail</td>
 		<td>callback function</td>
-		<td>ajax only</td>
+		<td>any(default)</td>
+		<td>
+			<div>1. ajax 결과에 대한 실패/에러 응답</div>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>loading</td>
 		<td>callback function</td>
-		<td>ajax only</td>
+		<td>any(default)</td>
+		<td>
+			<div>1. ajax 시작 시 loading 시작 처리</div>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
 	</tr>
 	<tr>
 		<td>unloading</td>
 		<td>callback function</td>
-		<td>ajax only</td>
+		<td>any(default)</td>
+		<td>
+			<div>1. ajax done/fail 시 loading 완료 처리</div>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
 	</tr>
 </table>
