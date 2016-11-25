@@ -170,8 +170,8 @@ var locate = function(){
 				return xhr;
 				*/
 				if(D.upload !== undefined){
-					$.ajaxSettings.xhr().upload.onprogress = function(e){
-						D.progress(Math.floor(e.loaded / e.total * 100));
+					return $.ajaxSettings.xhr().upload.onprogress = function(e){
+						D.upload(Math.floor(e.loaded / e.total * 100));
 					};
 				}
 			}
