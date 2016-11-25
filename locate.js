@@ -65,6 +65,7 @@ var locate = function(){
 			, fail: function(){} //error
 			, loading: undefined //show loading callback
 			, unloading: undefined //hide loading callback
+			, upload: undefined //control upload progress
 
 			, unique: function(){
 				var result = "_";
@@ -160,12 +161,19 @@ var locate = function(){
 			, contentType: D.contentType
 			, processData: D.processData
 			, headers: D.headers
-			, xhr: function(){
+			, xhr: function(){ //for upload
+				/*
 				var xhr = $.ajaxSettings.xhr();
 				xhr.upload.onprogress = function(e){
 					console.log(Math.floor(e.loaded / e.total *100) + '%');
 				};
 				return xhr;
+				*/
+				if(D.upload !== undefined){
+					return $.ajaxSettings.xhr().upload.onprogress = function(e){
+						D.progress(Math.floor(e.loaded / e.total * 100));
+					};
+				}
 			}
 			, success: function(data, status, xhr){
 				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
