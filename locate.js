@@ -162,18 +162,13 @@ var locate = function(){
 			, processData: D.processData
 			, headers: D.headers
 			, xhr: function(){ //for upload
-				/*
 				var xhr = $.ajaxSettings.xhr();
 				xhr.upload.onprogress = function(e){
-					console.log(Math.floor(e.loaded / e.total *100) + '%');
+					if(D.upload !== undefined){
+						D.upload(Math.floor(e.loaded / e.total * 100));
+					}
 				};
 				return xhr;
-				*/
-				if(D.upload !== undefined){
-					$.ajaxSettings.xhr().upload.onprogress = function(e){
-						D.upload(Math.floor(e.loaded / e.total * 100));
-					};
-				}
 			}
 			, success: function(data, status, xhr){
 				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
