@@ -12,8 +12,9 @@
 ### 필수 유의 사항 ###
 * ajax type을 지정하지 않으면 기본 'post'로 설정된다.
 * ajax type이 'get'이면 file 전송이 되지 않으므로, file 전송을 원하는 경우엔 type을 지정하지 않던지, 'post'로 지정하면 된다. 특히 파일 전송을 위해서는 param을 jquery form element로 대입해주어야 한다.
-* cross domain 문제 때문에 ajax return type을 'jsonp'로 하는 경우엔 type이 무조건 'get'으로 설정된다.
-* headers 정보를 추가하기 위해서는 ajax return type이 'jsonp'가 아니어야 한다.
+* 혹시 form 내에 file이 있는데 ajax type을 get으로 지정하여 form 정보를 전송하는 경우엔, file을 filtering된 form serialized data만 전송한다.
+* cross domain 문제 때문에 ajax return type을 'jsonp'로 하는 경우엔 type이 무조건 'get'으로 설정된다. 따라서 file 전송도 불가능하다.
+* headers 정보를 추가하기 위해서는 type이 'get'이나 'post'나 모두 설정 가능하지만, ajax return type이 'jsonp'가 아니어야 한다.
 
 ### 1. locate(url)/url.locate() method ###
 * 해당 url 페이지로 이동하는 같은 동작을 하는 함수다.

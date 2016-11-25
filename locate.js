@@ -160,6 +160,13 @@ var locate = function(){
 			, contentType: D.contentType
 			, processData: D.processData
 			, headers: D.headers
+			, xhr: function(){
+				var xhr = $.ajaxSettings.xhr();
+				xhr.upload.onprogress = function(e){
+					console.log(Math.floor(e.loaded / e.total *100) + '%');
+				};
+				return xhr;
+			}
 			, success: function(data, status, xhr){
 				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
 
