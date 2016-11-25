@@ -206,4 +206,12 @@
 			<div>2. ajax 시 사용 가능</div>
 		</td>
 	</tr>
+	<tr>
+		<td>upload</td>
+		<td>callback function</td>
+		<td>any(default)</td>
+		<td>
+			<div>2. ajax 시 사용 가능</div>
+		</td>
+	</tr>
 </table>
