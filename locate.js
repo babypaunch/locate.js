@@ -1,7 +1,7 @@
 /*
 * 개발: 정대규
 * 최초: 2015.10.24
-* 수정: 2016.11.23
+* 수정: 2016.11.29
 * lisence: MIT
 */
 "use strict";
@@ -18,6 +18,9 @@
 * url.locate(string)
 * url.locate($form)
 * url.locate(json)
+*
+* $(element).locate(url, done, fail)
+* $(element).locate(json)
 */
 var locate = function(){
 	var data = undefined;

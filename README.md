@@ -15,6 +15,8 @@
 * 혹시 form 내에 file이 있는데 ajax type을 get으로 지정하여 form 정보를 전송하는 경우엔, file이 filtering된 form의 serialized data만 전송한다.
 * cross domain 문제 때문에 ajax return type을 'jsonp'로 하는 경우엔 type이 무조건 'get'으로 설정된다. 따라서 file 전송도 불가능하다.
 * headers 정보를 추가하기 위해서는 type이 'get'이나 'post'나 모두 설정 가능하지만, ajax return type이 'jsonp'가 아니어야 한다.
+* 서버에서 jsonp callback 함수 처리를 위해서는 'jsonpCallback'이라는 파라미터명을 받아서 처리해야한다. 'jsonpCallback' 파라미터는 내부적으로 처리되는 동적 문자열로 서버에서도 파라미터 처리를 동적으로 해주어야 한다.
+* jquery의 load()와 같이 사용하고자 하는 경우엔, 반드시 cross domain 정책에 걸리지 않아야 동작된다.
 
 ### 1. locate(url)/url.locate() method ###
 * 해당 url 페이지로 이동하는 같은 동작을 하는 함수다.
