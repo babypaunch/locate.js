@@ -27,7 +27,6 @@ var locate = function(){
 			location.href = arguments[0];
 		}else{ //json
 			data = arguments[0];
-			data.log = data.log || "[1-1] locate(data)";
 		}
 	} //end: if(arguments.length === 1){
 
@@ -42,14 +41,11 @@ var locate = function(){
 		}else{
 			try{
 				if(arguments[1].is("form")){ //form
-					console.log("[args-form]", arguments[1]);
 					arguments[1].attr({action: url}).submit();
 				}
 			}catch(e){ //json
-				console.log("[args-json]", arguments[1]);
 				data = arguments[1];
 				data.url = arguments[0];
-				data.log = data.log || "[1-2] locate(data)";
 			}
 		}
 	} //end: if(arguments.length === 2){
@@ -80,13 +76,11 @@ var locate = function(){
 		D.processData = true;
 		D.data = D.param;
 		if($.type(D.param) === "string"){
-			console.log("[param][string]");
 			D.contentType = "application/x-www-form-urlencoded; charset=utf-8";
 		}else{
 			try{
 				if(D.param.is("form")){ //form
 					if(D.param.find("input[type='file']").length > 0 && D.type.toLowerCase() === "post"){ //file ajaxSubmit
-						console.log("[param][form][has file]");
 						//비동기 파일 전송시 반드시 contentType과 processData의 값이 false로 고정되야 함.
 						D.contentType = false;
 						D.processData = false;
@@ -94,13 +88,11 @@ var locate = function(){
 						var formData = new FormData(D.param[0]);
 						D.data = formData;
 					}else{ //serialize form
-						console.log("[param][form][no file]");
 						D.contentType = "application/x-www-form-urlencoded; charset=utf-8";
 						D.data = D.param.serialize();
 					}
 				}
 			}catch(e){ //json
-				console.log("[param][json]");
 				D.contentType = "application/json; charset=utf-8";
 			}
 		}
@@ -195,6 +187,5 @@ var locate = function(){
 String.prototype.locate = function(data){
 	data = data || {};
 	data.url = this;
-	data.log = "[2] url.locate(data)";
 	locate(data);
 } //end: String.prototype.locate = function(data){
