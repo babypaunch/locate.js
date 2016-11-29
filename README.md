@@ -28,7 +28,8 @@
 </pre>
 
 ### 2. locate(url, string)/url.locate(string) method ###
-* 해당 url 페이지로 이동시 query string을 붙여 이동한다.
+* 해당 url 페이지로 이동시 get 방식으로 query string을 붙여 이동한다.
+* 파라미터 문자열에 특별히 오류만 없으면 ?(question mark)나 &(ampersand)에 대한 처리를 내부적으로 하고 있다. 따라서 파라미터 문자열은 한 쌍이 되도록 작성만 해주면 된다.
 * 아래 주석 처리된 결과는 모두 동일하게 처리된다.
 <pre>
 	$(function(){
@@ -99,13 +100,22 @@
 			, fail: function(data){
 				console.log(data);
 			}
+			, loading: function(){
+				alert("loading");
+			}
+			, unloading: function(){
+				alert("unloading");
+			}
+			, upload: function(data){
+				console.log(data);
+			}
 		};
 		
 		locate(json);
 	});
 </pre>
 
-#### options description ####
+#### JSON parameter description ####
 ##### default value가 있다는 것은 생략할 수 있음을 의미한다. #####
 <table>
 	<tr>

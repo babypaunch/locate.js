@@ -85,7 +85,7 @@ var locate = function(){
 		}else{
 			try{
 				if(D.param.is("form")){ //form
-					if(D.param.find("input[type='file']").length > 0){ //file ajaxSubmit
+					if(D.param.find("input[type='file']").length > 0 && D.type.toLowerCase() === "post"){ //file ajaxSubmit
 						console.log("[param][form][has file]");
 						//비동기 파일 전송시 반드시 contentType과 processData의 값이 false로 고정되야 함.
 						D.contentType = false;
