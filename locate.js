@@ -189,3 +189,50 @@ String.prototype.locate = function(data){
 	data.url = this;
 	locate(data);
 } //end: String.prototype.locate = function(data){
+
+/*
+* $(element).locate()
+*/
+$.fn.locate = function(){
+	var D = {
+		url: ""
+		, done: undefined //success
+		, fail: undefined //error
+	};
+
+	if(arguments.length > 0){
+		if($.type(arguments[0]) === "string"){
+			D.url = arguments[0];
+			if(arguments.length > 1){
+				D.done = arguments[1];
+				if(arguments.length > 2){
+					D.fail = arguments[2];
+				}
+			}
+		}else{
+			D.url = arguments[0].url;
+			D.done = arguments[0].done;
+			D.fail = arguments[0].fail;
+		}
+	}
+
+	return this.each(function(){
+		var $element = $(this);
+		$element.load(D.url, function(data){
+			if(data === undefined){
+				if(D.fail === true){
+					var style = "style='margin: 10px 0; padding: 10px; background: gray; color: white; font-weight: bold; text-align: center;'";
+					$element.html("<div data-locate-error " + style + ">Error</div>");
+				}else{
+					if(D.fail !== undefined){
+						D.fail();
+					}
+				}
+			}else{
+				if(D.done !== undefined){
+					D.done(data);
+				}
+			}
+		});
+	});
+}

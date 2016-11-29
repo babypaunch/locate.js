@@ -321,6 +321,56 @@
 		</div>
 	</div>
 
+	<div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Example 5. route/load similar
+			</div>
+			<div class="panel-body">
+				<div>
+<code>$(function(){</code>
+<code class="tab1x">$("#loadA").click(function(){</code>
+<code class="tab2x">$("#loaded").locate("a.html #login");</code>
+<code class="tab1x">});</code>
+<code></code>
+<code class="tab1x">$("#loadB").click(function(){</code>
+<code class="tab2x">$("#loaded").locate({</code>
+<code class="tab3x">url: "b.html"</code>
+<code class="tab2x">});</code>
+<code class="tab1x">});</code>
+<code></code>
+<code class="tab1x">$("#errorC").click(function(){</code>
+<code class="tab2x">$("#loaded").locate("c.html", function(){</code>
+<code class="tab3x">console.log(data);</code>
+<code class="tab2x">}, true);</code>
+<code class="tab1x">});</code>
+<code></code>
+<code class="tab1x">$("#errorD").click(function(){</code>
+<code class="tab2x">$("#loaded").locate({</code>
+<code class="tab3x">url: "d.html"</code>
+<code class="tab3x">, done: function(data){</code>
+<code class="tab4x">console.log(data);</code>
+<code class="tab3x">}</code>
+<code class="tab3x">, fail: function(){</code>
+<code class="tab4x">alert("ERROR");</code>
+<code class="tab3x">}</code>
+<code class="tab2x">});</code>
+<code class="tab1x">});</code>
+<code>})</code>
+				</div>
+				<br/>
+				<div>
+					<button type="button" id="loadA" class="btn btn-default">load A</button>
+					<button type="button" id="loadB" class="btn btn-default">load B</button>
+					<button type="button" id="errorC" class="btn btn-default">error C</button>
+					<button type="button" id="errorD" class="btn btn-default">error D</button>
+				</div>
+				<br/>
+				<div id="loaded"></div>
+			</div>
+		</div>
+	</div>
+
     <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="jquery.babypaunch.spinner.min.js"></script>
@@ -404,6 +454,34 @@
 					}
 					, fail: function(data){
 						console.log("[locate4_4][fail]", data);
+					}
+				});
+			});
+
+			$("#loadA").click(function(){
+				$("#loaded").locate("a.html #login");
+			});
+
+			$("#loadB").click(function(){
+				$("#loaded").locate({
+					url: "b.html"
+				});
+			});
+
+			$("#errorC").click(function(){
+				$("#loaded").locate("c.html", function(data){
+					console.log(data);
+				}, true);
+			});
+
+			$("#errorD").click(function(){
+				$("#loaded").locate({
+					url: "d.html"
+					, done: function(data){
+						console.log(data);
+					}
+					, fail: function(){
+						alert("ERROR");
 					}
 				});
 			});
