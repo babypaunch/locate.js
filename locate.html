@@ -485,6 +485,10 @@
 					}
 				});
 			});
+
+			$("#loaded").on("click", "#login_btn", function(){
+				alert($("#login_form").serialize());
+			});
 		});
 	</script>
 </body>
