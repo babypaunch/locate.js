@@ -143,7 +143,9 @@ var locate = function(){
 		if(D.loading !== undefined){
 			D.loading();
 		}else{
-			$("body").append("<div id='locate-spinner'></div>");
+			if($("#locate-spinner").length === 0){
+				$("body").append("<div id='locate-spinner'></div>");
+			}
 			$("#locate-spinner").spinner().show();
 		}
 
