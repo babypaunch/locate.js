@@ -1,7 +1,7 @@
 /*
 * 개발: 정대규
 * 최초: 2015.10.24
-* 수정: 2016.11.29
+* 수정: 2016.12.06
 * lisence: MIT
 */
 "use strict";
@@ -58,7 +58,7 @@ var locate = function(){
 			url: ""
 			, param: "" //string or json
 			, type: "post" //get or post
-			, returnType: "text" //text(default), json, jsonp
+			, returnType: "json" //json(default), text, jsonp
 			, headers: {} //set ajax header data(can't set with jsonp)
 			, done: function(){} //success
 			, fail: function(){} //error
@@ -94,6 +94,8 @@ var locate = function(){
 						D.contentType = "application/x-www-form-urlencoded; charset=utf-8";
 						D.data = D.param.serialize();
 					}
+				}else{
+					D.contentType = "application/json; charset=utf-8";
 				}
 			}catch(e){ //json
 				D.contentType = "application/json; charset=utf-8";
@@ -168,7 +170,8 @@ var locate = function(){
 			, success: function(data, status, xhr){
 				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
 
-				D.done(arguments);
+				//D.done(arguments);
+				D.done(data);
 			}, error: function(xhr, status, error){
 				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
 
