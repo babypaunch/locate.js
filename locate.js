@@ -140,13 +140,14 @@ var locate = function(){
 		}
 		D.dataType = D.returnType; //set dataType to text/json/jsonp
 
+		var $loader = $("#locate-spinner");
 		if(D.loading !== undefined){
 			D.loading();
 		}else{
-			if($("#locate-spinner").length === 0){
+			if($loader.length === 0){
 				$("body").append("<div id='locate-spinner'></div>");
 			}
-			$("#locate-spinner").spinner().show();
+			$loader.spinner().show();
 		}
 
 		/*
@@ -170,12 +171,12 @@ var locate = function(){
 				return xhr;
 			}
 			, success: function(data, status, xhr){
-				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
+				D.unloading === undefined ? $loader.hide() : D.unloading($loader);
 
 				//D.done(arguments);
 				D.done(data);
 			}, error: function(xhr, status, error){
-				D.unloading === undefined ? $("#locate-spinner").hide() : D.unloading();
+				D.unloading === undefined ? $loader.hide() : D.unloading($loader);
 
 				if(D.dataType === "jsonp"){
 				   	if(xhr.status !== 200){
