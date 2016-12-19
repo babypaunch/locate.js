@@ -119,14 +119,14 @@ var locate = function(){
 					* jsonp를 요청하면 get 방식을 권장하고 있다
 					* 따라서 jsonp를 이용할 때는 FormData에 먼저 jsonpCallback을 대입하고
 					* type이 object인 것들을 제외해서 D.data의 값을 serialized된 문자열로 대체한다.
+					* server에서는 반드시 JSON.stringify된 문자열을 보내줘야 정상 처리된다.
 					*/
 					if(D.param.is("form")){ //form
 						D.data.append("jsonpCallback", u);
 
 						var serialized = "";
-						for(var pair of D.data.entries()){
-							if(typeof(pair[1]) !== "object"){
-								serialized += "&" + pair[0] + "=" + pair[1]
+						for(var key in D.data){
+							if(typeof(D.data[key]) !== "object"){
 							}
 						}
 						D.data = serialized;
