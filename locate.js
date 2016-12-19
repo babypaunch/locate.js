@@ -127,6 +127,7 @@ var locate = function(){
 						var serialized = "";
 						for(var key in D.data){
 							if(typeof(D.data[key]) !== "object"){
+								serialized += "&" + key + "=" + D.data[key];
 							}
 						}
 						D.data = serialized;
