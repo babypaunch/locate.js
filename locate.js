@@ -44,7 +44,8 @@ var locate = function(){
 		}else{
 			try{
 				if(arguments[1].is("form")){ //form
-					arguments[1].attr({action: url}).submit();
+					arguments[1].attr({action: url, method: "post"}).submit();
+					return false;
 				}
 			}catch(e){ //json
 				data = arguments[1];
