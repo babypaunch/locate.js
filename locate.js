@@ -146,10 +146,11 @@ var locate = function(){
 		if(D.loading !== undefined){
 			D.loading();
 		}else{
+			var spinner = "locate-spinner";
 			if($loader.length === 0){
-				$("body").append("<div id='locate-spinner'></div>");
+				$("body").append("<div id='" + spinner + "'></div>");
 			}
-			$loader.spinner().show();
+			$("#" + spinner).spinner().show();
 		}
 
 		/*
