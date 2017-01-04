@@ -142,12 +142,11 @@ var locate = function(){
 		}
 		D.dataType = D.returnType; //set dataType to text/json/jsonp
 
-		var $loader = $("#locate-spinner");
+		var spinnerId = "locate-spinner";
 		if(D.loading !== undefined){
 			D.loading();
 		}else{
-			var spinner = "locate-spinner";
-			if($loader.length === 0){
+			if($("#" + spinnerId).length === 0){
 				$("body").append("<div id='" + spinner + "'></div>");
 			}
 			$("#" + spinner).spinner().show();
@@ -174,12 +173,12 @@ var locate = function(){
 				return xhr;
 			}
 			, success: function(data, status, xhr){
-				D.unloading === undefined ? $loader.hide() : D.unloading($loader);
+				D.unloading === undefined ? $("#" + spinnerId).hide() : D.unloading($("#" + spinnerId));
 
 				//D.done(arguments);
 				D.done(data);
 			}, error: function(xhr, status, error){
-				D.unloading === undefined ? $loader.hide() : D.unloading($loader);
+				D.unloading === undefined ? $("#" + spinnerId).hide() : D.unloading($("#" + spinnerId));
 
 				if(D.dataType === "jsonp"){
 				   	if(xhr.status !== 200){
