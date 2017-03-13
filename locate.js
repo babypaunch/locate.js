@@ -58,7 +58,13 @@ var locate = function(){
 		var D = {
 			url: ""
 			, param: "" //string or json
+			, $form: undefined
 			, type: "post" //get or post
+			, sendType: "text"
+			, SENDTYPE: {
+				text: "application/x-www-form-urlencoded; charset=utf-8"
+				, json: "application/json; charset=utf-8"
+			}
 			, returnType: "json" //json(default), text, jsonp
 			, headers: {} //set ajax header data(can't set with jsonp)
 			, done: function(){} //success
@@ -77,34 +83,40 @@ var locate = function(){
 		};
 		$.extend(true, D, data);
 
+		/*
+		* contentType은 기본적으로 sendType을 따라가도록 한다. $form이 지정되었을 경우에만 추가 처리하면 된다.
+		* $form이 ajaxSubmit되는 경우에 processData는 false가 되고, 나머지는 모두 true여야한다.
+		* $form과 다르게 param이 form인 경우엔 serialize된 문자열을 data에 대입한다.
+		*/
+		D.contentType = D.SENDTYPE[D.sendType];
 		D.processData = true;
-		D.data = D.param;
-		if($.type(D.param) === "string"){
-			D.contentType = "application/x-www-form-urlencoded; charset=utf-8";
-		}else{
-			try{
-				if(D.param.is("form")){ //form
-					if(D.param.find("input[type='file']").length > 0 && D.type.toLowerCase() === "post"){ //file ajaxSubmit
-						//비동기 파일 전송시 반드시 contentType과 processData의 값이 false로 고정되야 함.
-						D.contentType = false;
-						D.processData = false;
+		try{
+			D.data = D.param.is("form") ? D.param.serialize() : D.param;
+		}catch(e){
+			D.data = D.param;
+		}
 
-						var formData = new FormData(D.param[0]);
-						D.data = formData;
-					}else{ //serialize form
-						D.contentType = "application/x-www-form-urlencoded; charset=utf-8";
-						D.data = D.param.serialize();
-					}
-				}else{
-					D.contentType = "application/json; charset=utf-8";
-				}
-			}catch(e){ //json
-				D.contentType = "application/json; charset=utf-8";
+		/*
+		* file ajaxSubmit을 사용할 경우만 $form을 지정하면 된다.
+		*/
+		if(D.$form !== undefined){
+			if(D.$form.find("input[type='file']").length > 0 && D.type.toLowerCase() === "post"){ //file ajaxSubmit
+				//비동기 파일 전송시 반드시 contentType과 processData의 값이 false로 고정되야 함.
+				D.contentType = false;
+				D.processData = false;
+
+				var formData = new FormData(D.$form[0]);
+				//D.data의 기존값을 formData에 append시켜야 한다.
+				D.data = formData;
 			}
 		}
 
+		/*
+		* jsonp를 이용할 때는 jsonpCallback을 파라미터로 대입해서 D.data의 값을 serialized된 문자열로 대체한다.
+		* server에서는 반드시 JSON.stringify된 문자열을 보내줘야 정상 처리된다.
+		*/
 		if(D.returnType === "jsonp"){
-			D.type = "get"; //jsonp로 받을 경우 반드시 type을 get으로 해야함.
+			D.type = "get"; //jsonp를 요청하려면 반드시 type을 get으로 해야함.
 
 			/*
 			* param의 유형에 따라 callback 함수명 대입
@@ -112,44 +124,35 @@ var locate = function(){
 			* server side에서는 jsonpCallback 파라미터가 있을 경우 구현해야 함.
 			*/
 			var u = D.unique();
-			if($.type(D.data) === "string"){
+			if($.type(D.data) === "string"){ //파라미터가 문자열이면
 				D.data += "&jsonpCallback=" + u;
-			}else{
+			}else{ //파라미터가 문자열이 아니면
 				try{
-					/*
-					* jsonp를 요청하면 get 방식을 권장하고 있다
-					* 따라서 jsonp를 이용할 때는 FormData에 먼저 jsonpCallback을 대입하고
-					* type이 object인 것들을 제외해서 D.data의 값을 serialized된 문자열로 대체한다.
-					* server에서는 반드시 JSON.stringify된 문자열을 보내줘야 정상 처리된다.
-					*/
 					if(D.param.is("form")){ //form
-						D.data.append("jsonpCallback", u);
-
-						var serialized = "";
-						for(var key in D.data){
-							if(typeof(D.data[key]) !== "object"){
-								serialized += "&" + key + "=" + D.data[key];
-							}
-						}
-						D.data = serialized;
+						D.data += "&jsonpCallback=" + u;
+					}else{ //json
+						D.data.jsonpCallback = u;
 					}
-				}catch(e){ //json
+				}catch(e){
 					D.data.jsonpCallback = u;
 				}
 			}
 
-			window[u] = D.done; //callback 함수 등록
+			window[u] = D.done; //jsonp용 callback 함수 등록
 		}
 		D.dataType = D.returnType; //set dataType to text/json/jsonp
 
 		var spinnerId = "locate-spinner";
+		
 		if(D.loading !== undefined){
 			D.loading();
 		}else{
-			if($("#" + spinnerId).length === 0){
-				$("body").append("<div id='" + spinner + "'></div>");
+			if($.type($.fn.spinner) === "function"){
+				if($("#" + spinnerId).length === 0){
+					$("body").append("<div id='" + spinnerId + "'></div>");
+				}
+				$("#" + spinnerId).spinner().show();
 			}
-			$("#" + spinner).spinner().show();
 		}
 
 		/*
@@ -173,12 +176,11 @@ var locate = function(){
 				return xhr;
 			}
 			, success: function(data, status, xhr){
-				D.unloading === undefined ? $("#" + spinnerId).hide() : D.unloading($("#" + spinnerId));
+				D.unloading === undefined ? $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "" : D.unloading($("#" + spinnerId));
 
-				//D.done(arguments);
 				D.done(data);
 			}, error: function(xhr, status, error){
-				D.unloading === undefined ? $("#" + spinnerId).hide() : D.unloading($("#" + spinnerId));
+				D.unloading === undefined ? $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "" : D.unloading($("#" + spinnerId));
 
 				if(D.dataType === "jsonp"){
 				   	if(xhr.status !== 200){
