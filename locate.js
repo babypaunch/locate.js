@@ -220,6 +220,7 @@ $.fn.locate = function(data){
 		$.extend(true, D, data);
 	}else{
 		D.url = arguments[0]; //url
+
 		if(arguments.length === 2){ //url, param or url, done
 			if($.type(arguments[1]) === "function"){ //done
 				D.done = arguments[1];
