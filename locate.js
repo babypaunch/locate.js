@@ -204,34 +204,49 @@ String.prototype.locate = function(data){
 } //end: String.prototype.locate = function(data){
 
 /*
-* $(element).locate()
+* $(element).locate(json)
+* 우선 post 방식으로도 parameter를 넘겨주도록 수정함.
+* 파라미터를 배열로 하는 경우에 반드시 갯수나 순서를 맞춰서 넘겨야함.
 */
-$.fn.locate = function(){
+$.fn.locate = function(data){
 	var D = {
 		url: ""
+		, param: undefined //parameters
 		, done: undefined //success
 		, fail: undefined //error
 	};
 
-	if(arguments.length > 0){
-		if($.type(arguments[0]) === "string"){
-			D.url = arguments[0];
-			if(arguments.length > 1){
+	if(arguments.length === 1){ //json을 받은 것으로 간주함.
+		$.extend(true, D, data);
+	}else{
+		D.url = arguments[0]; //url
+		if(arguments.length === 2){ //url, param or url, done
+			if($.type(arguments[1]) === "function"){ //done
 				D.done = arguments[1];
-				if(arguments.length > 2){
-					D.fail = arguments[2];
-				}
+			}else{ //param
+				D.param = arguments[1];
 			}
-		}else{
-			D.url = arguments[0].url;
-			D.done = arguments[0].done;
-			D.fail = arguments[0].fail;
+		}
+
+		if(arguments.length === 3){ //url, param, done or url, done, fail
+			if($.type(arguments[1]) === "function"){ //done
+				D.done = arguments[1];
+			}else{
+				D.param = arguments[1];
+			}
+			D.fail = arguments[2];
+		}
+
+		if(arguments.length === 4){ //url, param, done, fail
+			D.param = arguments[1];
+			D.done = arguments[2];
+			D.fail = arguments[3];
 		}
 	}
 
 	return this.each(function(){
 		var $element = $(this);
-		$element.load(D.url, function(data){
+		$element.load(D.url, D.param, function(data){
 			if(data === undefined){
 				if(D.fail === true){
 					var style = "style='margin: 10px 0; padding: 10px; background: gray; color: white; font-weight: bold; text-align: center;'";
@@ -248,4 +263,4 @@ $.fn.locate = function(){
 			}
 		});
 	});
-}
+} //end: $.fn.locate = function(json){
