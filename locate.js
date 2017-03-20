@@ -69,8 +69,8 @@ var locate = function(){
 			, headers: {} //set ajax header data(can't set with jsonp)
 			, done: function(){} //success
 			, fail: function(){} //error
-			, loading: undefined //show loading callback
-			, unloading: undefined //hide loading callback
+			, loading: undefined //show loading callback, false가 들어오면 아무 동작 안 함.
+			, unloading: undefined //hide loading callback, false가 들어오면 아무 동작 안 함.
 			, upload: undefined //control upload progress
 
 			, unique: function(){
@@ -144,7 +144,7 @@ var locate = function(){
 
 		var spinnerId = "locate-spinner";
 		
-		if(D.loading !== undefined){
+		if(D.loading !== undefined && D.loading !== false){
 			D.loading();
 		}else{
 			if($.type($.fn.spinner) === "function"){
@@ -176,11 +176,11 @@ var locate = function(){
 				return xhr;
 			}
 			, success: function(data, status, xhr){
-				D.unloading === undefined ? $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "" : D.unloading($("#" + spinnerId));
+				D.unaloding !== undefined && D.unloading !== false ? D.unloading($("#" + spinnerId)) : $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "";
 
 				D.done(data);
 			}, error: function(xhr, status, error){
-				D.unloading === undefined ? $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "" : D.unloading($("#" + spinnerId));
+				D.unaloding !== undefined && D.unloading !== false ? D.unloading($("#" + spinnerId)) : $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "";
 
 				if(D.dataType === "jsonp"){
 				   	if(xhr.status !== 200){
