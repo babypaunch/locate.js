@@ -1,7 +1,7 @@
 /*
 * 개발: 정대규
 * 최초: 2015.10.24
-* 수정: 2016.12.06
+* 수정: 2017.04.21
 * lisence: MIT
 */
 "use strict";
@@ -40,7 +40,7 @@ var locate = function(){
 			var param = arguments[1] || "";
 			var question = url.indexOf("?") !== -1 || param.indexOf("?") !== -1;
 			var query = question ? (param === "" ? "" : (param.charAt(0) === "&" ? param : "&" + param)) : (param === "" ? "" : "?" + (param.charAt(0) === "&" ? param.substr(1) : param));
-			location.href = url + query; 
+			location.href = url + query;
 		}else{
 			try{
 				if(arguments[1].is("form")){ //form
@@ -143,15 +143,17 @@ var locate = function(){
 		D.dataType = D.returnType; //set dataType to text/json/jsonp
 
 		var spinnerId = "locate-spinner";
-		
-		if(D.loading !== undefined && D.loading !== false){
-			D.loading();
-		}else{
+
+		if(D.loading === undefined || D.loading === true){ //loading이 undefined이거나 true이면 자동 생성, 그 외는 비생성
 			if($.type($.fn.spinner) === "function"){
 				if($("#" + spinnerId).length === 0){
 					$("body").append("<div id='" + spinnerId + "'></div>");
 				}
 				$("#" + spinnerId).spinner().show();
+			}
+		}else{
+			if($.type(D.loading) === "function"){ //D.loading이 function인 경우만 실행
+				D.loading();
 			}
 		}
 
@@ -176,11 +178,11 @@ var locate = function(){
 				return xhr;
 			}
 			, success: function(data, status, xhr){
-				D.unaloding !== undefined && D.unloading !== false ? D.unloading($("#" + spinnerId)) : $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "";
+				this.unloader();
 
 				D.done(data);
 			}, error: function(xhr, status, error){
-				D.unaloding !== undefined && D.unloading !== false ? D.unloading($("#" + spinnerId)) : $.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "";
+				this.unloader();
 
 				if(D.dataType === "jsonp"){
 				   	if(xhr.status !== 200){
@@ -189,6 +191,9 @@ var locate = function(){
 				}else{
 					D.fail(arguments);
 				}
+			}
+			, unloader: function(){
+				D.unloading === undefined || D.unloading === true ? ($.type($.fn.spinner) === "function" ? $("#" + spinnerId).hide() : "") : ($.type(D.unloading) === "function" ? D.unloading($("#" + spinnerId)) : "");
 			}
 		}); //end: $.ajax({
 	} //end: if(data !== undefined){
