@@ -1,7 +1,7 @@
 /*
 * 개발: 정대규
 * 최초: 2015.10.24
-* 수정: 2017.04.21
+* 수정: 2017.04.26
 * lisence: MIT
 */
 "use strict";
@@ -107,9 +107,24 @@ var locate = function(){
 
 				var formData = new FormData(D.$form[0]);
 				//D.data의 기존값을 formData에 append시켜야 한다.
+				switch($.type(D.data)){
+					case "string":
+						var arr = D.data.split("&");
+						for(var i = 0; i < arr.length; i++){
+							var pair = arr[i].split("=");
+							formData.append(pair[0], pair[1]);
+						}
+					break;
+					case "object":
+						for(var key in D.data){
+							formData.append(key, D.data[key]);
+						}
+					break;
+				} //end: switch($.type(D.data)){
+
 				D.data = formData;
-			}
-		}
+			} //end: if(D.$form.find("input[type='file']").length > 0 && D.type.toLowerCase() === "post"){
+		} //end: if(D.$form !== undefined){
 
 		/*
 		* jsonp를 이용할 때는 jsonpCallback을 파라미터로 대입해서 D.data의 값을 serialized된 문자열로 대체한다.
