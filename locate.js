@@ -55,6 +55,18 @@ var locate = function(){
 	} //end: if(arguments.length === 2){
 
 	if(data !== undefined){
+		//post 방식으로 단순 페이지 이동을 쉽게 하기 위해, 임의의 form을 넣어서 정보 전송.
+		if(data.type === "submit"){
+			var inputs = "";
+			for(var i in data.param){
+				inputs += "<input type='hidden' name='" + i + "' value='" + data.param[i] + "'/>";
+			}
+			var formId = "locate-submit-form";
+			$("body").append("<form id='" + formId + "' action='" + data.url + "' method='post'>" + inputs + "</form>");
+			$("#" + formId).submit();
+			return false;
+		}
+
 		var D = {
 			url: ""
 			, param: "" //string or json
